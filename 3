@@ -1,11 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
 
-def function_announce(f):
-    def wrapper(*args, **kwargs):
-        print(f"Calling: {f.__name__}")
-        f(*args, **kwargs)
-    return wrapper
-
 class Window:
     def __init__(self, width, height) -> None:
         
@@ -53,11 +47,8 @@ class Line:
 
 class Cell:
     def __init__(
-            self,
-            xy_tl, 
-            xy_br, 
-            lw = True, rw = True, tw = True, bw = True,
-            win = None, 
+            self, window, xy_tl, xy_br, 
+            lw = True, rw = True, tw = True, bw = True
             ) -> None:
         self.has_left_wall = lw
         self.has_right_wall = rw
@@ -67,7 +58,7 @@ class Cell:
         self._x2 = xy_br[0]
         self._y1 = xy_tl[1]
         self._y2 = xy_br[1]
-        self._win = win
+        self._win = window
 
     def draw(self):
         walls = []
@@ -85,11 +76,8 @@ class Cell:
             walls.append(
                     Line(Point(self._x1, self._y2), Point(self._x2, self._y2)))
 
-        if self._win is None:
-            pass
-        else:
-            for w in walls:
-                self._win.draw_line(w, "black")
+        for w in walls:
+            self._win.draw_line(w, "black")
     
     def draw_move(self, to_cell, undo=False):
         own_middle_x = (self._x1 + self._x2) / 2
@@ -117,10 +105,10 @@ class Maze:
             num_cols,
             cell_size_x,
             cell_size_y,
-            win = None,
+            win,
             ) -> None:
         self._x1 = x1
-        self._y1 = y1
+        self._x2 = x2
         self.num_rows = num_rows
         self.num_cols = num_cols
         self._cell_size_x = cell_size_x
@@ -131,41 +119,28 @@ class Maze:
     def _create_cells(self):
         self._cells = []
         for c in range(self.num_cols):
+            self._cells.append([])
+        for 
 
-            column = [Cell(
-                    (self._x1 + self._cell_size_x * r, self._y1 + self._cell_size_y * c),
-                    (self._x1 + self._cell_size_x * (r+1), self._y1 + self._cell_size_y * (c+1)),
-                    win = self._win,
-                    ) for r in range(self.num_rows)]
-
-            self._cells.append(column)
-        self._animate()
+    def _draw_cell(self,i,j):
+        pass
 
     def _animate(self):
-        for col in self._cells:
-            for cel in col:
-                cel.draw()
-                self._win.redraw()
-                from time import sleep
-                sleep(0.05)
-
+        pass
 
 def main():
     win = Window(800,600)
+    l1 = Line(Point(20, 200), Point(30, 300))
+    l2 = Line(Point(600, 100), Point(100, 400))
+    win.draw_line(l1, "blue")
+    win.draw_line(l2, "red")
     
-    #l1 = Line(Point(20, 200), Point(30, 300))
-    #l2 = Line(Point(600, 100), Point(100, 400))
-    #win.draw_line(l1, "blue")
-    #win.draw_line(l2, "red")
-  
-    #c1 = Cell((40, 40), (60,60), False, True, True, True, win) 
-    #c2 = Cell((80, 40), (120, 80), True, False, True, False, win)
-    #c1.draw()
-    #c2.draw()
+    c1 = Cell(win, (40, 40), (60,60), False, True, True, True)
+    c2 = Cell(win, (80, 40), (120, 80), True, False, True, False)
+    c1.draw()
+    c2.draw()
 
-    #c1.draw_move(c2)
-    
-    maze1 = Maze(100, 100, 4, 4, 100, 100, win)
+    c1.draw_move(c2)
 
     # dont touch this
     win.wait_for_close()
