@@ -78,6 +78,37 @@ class Cell:
 
         for w in walls:
             self._win.draw_line(w, "black")
+    
+    def draw_move(self, to_cell, undo=False):
+        own_middle_x = (self._x1 + self._x2) / 2
+        own_middle_y = (self._y1 + self._y2) / 2
+        target_middle_x = (to_cell._x1 + to_cell._x2) / 2
+        target_middle_y = (to_cell._y1 + to_cell._y2) / 2
+
+        print(f"Own coordinates: {self._x1}, {self._y1}; {self._x2}, {self._y2}.")
+        print(f"Line starting point: {own_middle_x}, {own_middle_y}")
+        print(f"Line ending point: {target_middle_x}, {target_middle_y}")
+
+        cell_line = Line(
+                Point(own_middle_x, own_middle_y),
+                Point(target_middle_x, target_middle_y))
+        cell_line_color = "red" if undo else "gray"
+
+        self._win.draw_line(cell_line, cell_line_color)
+        
+class Maze:
+    def __init__(
+            self,
+            x1,
+            y1,
+            num_rows,
+            num_cols,
+            cell_size_x,
+            cell_size_y,
+            win,
+            ) -> None:
+        pass
+
 
 def main():
     win = Window(800,600)
@@ -90,6 +121,8 @@ def main():
     c2 = Cell(win, (80, 40), (120, 80), True, False, True, False)
     c1.draw()
     c2.draw()
+
+    c1.draw_move(c2)
 
     # dont touch this
     win.wait_for_close()
