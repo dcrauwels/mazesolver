@@ -85,9 +85,7 @@ class Cell:
             walls.append(
                     Line(Point(self._x1, self._y2), Point(self._x2, self._y2)))
 
-        if self._win is None:
-            pass
-        else:
+        if self._win is not None:
             for w in walls:
                 self._win.draw_line(w, "black")
     
@@ -145,7 +143,8 @@ class Maze:
         for col in self._cells:
             for cel in col:
                 cel.draw()
-                self._win.redraw()
+                if self._win is not None:
+                    self._win.redraw()
                 from time import sleep
                 sleep(0.05)
 
